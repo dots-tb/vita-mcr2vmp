@@ -18,8 +18,7 @@ Or use CMD:
 ### I wanna edit my PSX Save Data from the vita!
 
 	1. Grab your save data from here: ux0:/pspemu/PSP/SAVEDATA/<titleid>/SCEVMC<0|1>.VMP
-	2. Open your save data on the computer with a hexeditor and delete the first 0x80, this will convert it to an MCR.
-	3. Save it as <name>.MCR.
-	4. You may now use it with your save editor or emulators(I think) of choice.
-	5. Follow the USAGE section to convert it back to a VMP. Make sure you place it back to the same location with the same file name.
-	6. ENJOY!
+	2. Run VMP file through program to export MCR.
+	3. You may now use it with your save editor or emulators of choice.
+	4. Follow the USAGE section to convert it back to a VMP. Make sure you place it back to the same location with the same file name.
+	5. ENJOY!
