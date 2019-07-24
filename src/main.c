@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 	
 		SHA1Update(&sha1_ctx_1, salt, 0x40);
 
-		memset(input + 0x20, 0, 0x14);
+		memset(input + HASH_OFFSET, 0, 0x14);
 		SHA1Update(&sha1_ctx_1, input, VMP_SZ);
 				
 		XorWithByte(salt, 0x6A, 0x40);
@@ -154,6 +154,7 @@ int main(int argc, char **argv)
 			goto error;
 		}
 		fwrite(input,  1, VMP_SZ, fout);
+		free(input);
 		printf("VMP created successfully.\n");
 	}
 
