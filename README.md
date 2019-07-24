@@ -3,7 +3,7 @@ by @dots_tb - signs psx mcr files for use with the vita's psp emulator
 
 With help from the CBPS (https://discord.gg/2nDCbxJ) , especially:
 
- Analog Man
+ @AnalogMan151
  
  @teakhanirons
  
