@@ -1,5 +1,5 @@
 # vita-mcr2vmp
-by [@dots_tb](https://github.com/dots-tb) - signs PSOne MCR files  to create VMP files for use with Sony Vita/PSP
+by [@dots_tb](https://github.com/dots-tb) - signs PSOne MCR files to create VMP files for use with Sony Vita/PSP and exports MCR files from VMP
 
 With help from the CBPS (https://discord.gg/2nDCbxJ) , especially:
  [@AnalogMan151](https://github.com/AnalogMan151)
