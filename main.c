@@ -22,12 +22,11 @@ uint8_t iv[0x10] = {0xB3, 0x0F, 0xFE, 0xED, 0xB7, 0xDC, 0x5E, 0xB7, 0x13, 0x3D, 
 #define PMV_MAGIC 0x564D5000
 #define FILE_SZ 0x20080
 
- void XorWithByte(uint8_t* buf, uint8_t byte, int length)
+void XorWithByte(uint8_t* buf, uint8_t byte, int length)
 {
-  for (int i = 0; i < length; ++i)
-  {
-    buf[i] ^= byte;
-  }
+	for (int i = 0; i < length; ++i) {
+    	buf[i] ^= byte;
+	}
 }
 
 
@@ -46,11 +45,24 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	FILE *fin, *fout;
+	char magic[4] = {0x4D, 0x43, 0x00, 0x00};
+	char buf[4];
 	fin = fopen(argv[1], "rb");
 	if (!fin) {
 		perror("Failed to open input file");
 		goto error;
 	}
+	
+	// Check MAGIC
+	fseek(fin, 0, SEEK_SET);
+	fread(buf, 1, 4, fin);
+	if (memcmp(buf, magic, 4) != 0) {
+		perror("File is not a MCR!");
+		goto error;
+	}
+
+	// Passes check, writes MCR with signed VMP header
+	fseek(fin, 0, SEEK_SET);
 	
 	size_t sz = FILE_SZ;
 	uint8_t *input = (unsigned char*) calloc (1, sz);
@@ -59,7 +71,7 @@ int main(int argc, char **argv)
 	input_ptr[1] = MCR_OFFSET;
 	
 	fseek(fin, 0, SEEK_SET);
-	fread(input + MCR_OFFSET,sz,1,fin);
+	fread(input + MCR_OFFSET, sz, 1, fin);
 	
     struct AES_ctx aes_ctx;
     AES_init_ctx_iv(&aes_ctx, key, iv);
@@ -128,6 +140,7 @@ int main(int argc, char **argv)
 		goto error;
 	}
 	fwrite(input,  1, FILE_SZ, fout);
+	printf("VMP created successfully.\n");
 error:
 	if (fin)
 		fclose(fin);
