@@ -1,28 +1,51 @@
-TARGET = vita-mcr2vmp
+ifeq ($(OS),Windows_NT)
+	TARGET_EXEC ?= vita-mcr2vmp-win
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+		TARGET_EXEC ?= vita-mcr2vmp-linux
+	endif
+    ifeq ($(UNAME_S),Darwin)
+		TARGET_EXEC ?= vita-mcr2vmp-macos
+	endif
+endif
 
-OBJS = aes.o main.o sha1.o
+BUILD_DIR ?= ./build
+SRC_DIRS ?= ./src ./include
+
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
+
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+
+CPPFLAGS ?= $(INC_FLAGS) -s -static -Wall -Wextra -std=c99
+
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+
+# assembly
+$(BUILD_DIR)/%.s.o: %.s
+	$(MKDIR_P) $(dir $@)
+	$(AS) $(ASFLAGS) -c $< -o $@
+
+# c source
+$(BUILD_DIR)/%.c.o: %.c
+	$(MKDIR_P) $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+# c++ source
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	$(MKDIR_P) $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 
-LIBS = -lz 
-
-CFLAGS = -s -static -Wall -Wextra -std=c99
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	@echo "Creating binary $(TARGET)"
-	$(CXX) $(OBJS) -o $@ $(LIBS)  -static -static-libgcc
-
-%.o: %.cpp
-	@echo "Compiling $^"
-	$(CXX) $(CFLAGS) -c $^ -o $@ -static -static-libgcc 
+.PHONY: clean
 
 clean:
-	@echo "Removing all the .o files"
-	@$(RM) $(OBJS)
+	$(RM) -r $(BUILD_DIR)
 
-mrproper: clean
-	@echo "Removing binary"
-	@$(RM) $(TARGET)
+-include $(DEPS)
 
-install: all
-	@cp $(TARGET) ../bin
+MKDIR_P ?= mkdir -p
