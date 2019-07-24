@@ -11,7 +11,7 @@ Drag and drop a PSOne MCR save file onto the program. It will generate a VMP tha
 You may also drag and drop a VMP file and extract the contained MCR file for editing or sharing. 
 
 Or use CMD:
-	./vita-mcr2vmp <memorycard.mcr|SCEVMC*.VMP>
+	./vita-mcr2vmp mem.mcr
 
 ## Further Instructions:
 
