@@ -1,4 +1,14 @@
-TARGET_EXEC ?= vita-mcr2vmp
+ifeq ($(OS),Windows_NT)
+	TARGET_EXEC ?= vita-mcr2vmp-win
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+		TARGET_EXEC ?= vita-mcr2vmp-linux
+	endif
+    ifeq ($(UNAME_S),Darwin)
+		TARGET_EXEC ?= vita-mcr2vmp-macos
+	endif
+endif
 
 BUILD_DIR ?= ./build
 SRC_DIRS ?= ./src ./include
