@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 		
 		printf("Generated key: ");
 		for(int i = 0; i < 0x14; i++ ) {
-			printf("%02x ", work_buf[i]);
+			printf("%02X ", input[HASH_OFFSET + i]);
 		}
 		printf("\n");
 		
